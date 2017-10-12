@@ -1,0 +1,8 @@
+
+[[constraint]]
+  name = "github.com/gin-gonic/gin"
+  version = "1.2.0"
+
+[[constraint]]
+  name = "upper.io/db.v3"
+  version = "3.5.0"
