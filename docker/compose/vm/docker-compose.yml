@@ -3,18 +3,21 @@ services:
   db:
     image: mysql
     environment:
+      # TODO: set up root pw in an includable file or setup non-root user/pw
       MYSQL_ROOT_PASSWORD: trololol
     volumes:
-     - ../../db/bootstrap:/docker-entrypoint-initdb.d # docker auto-runs all .sql or .sql.gz files in this path.
+    # docker auto-runs all .sql or .sql.gz files in this path.
+     - ../../db/bootstrap:/docker-entrypoint-initdb.d
   app:
-    image: golang:1.9-alpine
+    image: golang:1.9
     volumes:
       - ../../../:/go/src/github.com/willdobbins/notes
     ports:
       - 8080:8080
+      - 3000:3000
     depends_on:
       - db
     links:
       - db
     working_dir: /go/src/github.com/willdobbins/notes
-    command: go run cmd/notes/notes.go
+    command: ./startup.sh
