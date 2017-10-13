@@ -2,6 +2,9 @@
 A bare-bones note taking app. 
 
 ## Up & Running
+```bash
+docker-compose -f ./docker/compose/vm/docker-compose.yml -p notes up
+```
 
 ## Desired Endpoints
 ```
@@ -23,3 +26,4 @@ body TEXT NOT NULL
 * Track creation date
 * Tags - quick categorization system
 * Better templates
+* Add a caching layer
