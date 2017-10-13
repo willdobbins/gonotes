@@ -18,6 +18,8 @@ func main() {
 	server.Service = service
 
 	router := gin.Default()
+
+	router.LoadHTMLGlob("./templates/*")
 	router.GET("/health", server.Health)
 	router.GET("/notes", server.ListNotes)
 	router.POST("/notes", server.CreateNote)

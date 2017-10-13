@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/willdobbins/notes"
+	"net/http"
 )
 
 type Server struct {
@@ -24,7 +25,7 @@ func (s Server) ListNotes(c *gin.Context) {
 	if err != nil {
 		log.Print(err)
 	}
-	c.JSON(200, set)
+	c.HTML(200, "index.tmpl", gin.H{"title": "List of Notes", "results": set})
 }
 
 func (s Server) GetNote(c *gin.Context) {
@@ -39,19 +40,18 @@ func (s Server) GetNote(c *gin.Context) {
 	if err != nil {
 		log.Print(err)
 	}
-
-	c.JSON(200, note)
+	c.HTML(200, "single.tmpl", note)
 }
 
 func (s Server) CreateNote(c *gin.Context) {
 	var add = new(notes.Note)
 	add.Body = c.PostForm("body")
 
-	note, err := s.Service.CreateNote(add)
+	_, err := s.Service.CreateNote(add)
 	if err != nil {
 		c.JSON(500, gin.H{"message": "CreateNote fail"})
 	}
-	c.JSON(200, note)
+	c.Redirect(http.StatusMovedPermanently, "/notes/")
 }
 
 func (s Server) DeleteNote(c *gin.Context) {
