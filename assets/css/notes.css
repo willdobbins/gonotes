@@ -1,0 +1,17 @@
+body {
+    margin: 40px;
+    font-family: 'Open Sans', 'sans-serif';
+    background-color: #fff;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    background-color: #eee;
+}
+
+li:nth-child(even) {
+    background-color: #ddd;
+}

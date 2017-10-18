@@ -1,16 +1,38 @@
+<!DOCTYPE html>
 <html>
-    <head><title>{{ .title }}</title></head>
-    <body>
-    <h1>List of Notes</h1>
-    <ul>
+  <head>
+    <title>Notes</title>
+    <link href="./assets/css/notes.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <section>
+      <header>
+        <h1>List of Notes</h1>
+      </header>
+      <nav>
+        <ul>
         {{range .results}}
-        <li><a href="/notes/{{.ID}}">{{ .Body }}</a></li>
+        <li>
+          <a href="/notes/{{.ID}}">
+            {{ .Title }}
+          </a>
+        </li>
         {{ end }}
-    </ul>
-    <h1>Create New Note</h1>
-    <form method="POST" action="/notes/">
-        <textarea name="body"></textarea>
+      </nav>
+    </section>
+    <section>
+      <header>
+        <h1>Create New Note</h1>
+      </header>
+      <form method="POST" action="/notes/">
+        <section>
+          <label>Title<input name="title" autocomplete="off"></label>
+        </section>
+        <section>
+          <textarea name="body" rows="10" cols="50"></textarea>
+        </section>
         <button type="submit">Create</button>
-    </form>
-    </body>
+      </form>
+    </section>
+  </body>
 </html>

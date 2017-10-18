@@ -1,6 +1,15 @@
 <html>
-<head><title>Message {{.ID}}</title></head>
+<head><title>{{.Title}}</title></head>
 <body>
-{{.Body}}
+  <article>
+    <header>
+      <h1>
+        {{.Title}}
+      </h1>
+    </header>
+    <textarea>
+      {{.Body}}
+    </textarea>
+  </article>
 </body>
 </html>
