@@ -16,7 +16,7 @@ type Service struct {
 }
 
 // Attempts to find a Note with the given ID.
-func (service Service) Note(id uint64) (*notes.Note, error) {
+func (service Service) One(id uint64) (*notes.Note, error) {
 
 	session, collection, err := service.connect() //Get db connection and a collection
 	if err != nil {
@@ -64,9 +64,9 @@ func (service Service) CreateNote(n *notes.Note) (*notes.Note, error) {
 	if err != nil {
 		parsedId, ok := id.(uint64)
 		if ok {
-			return service.Note(parsedId)
+			return service.One(parsedId)
 		}
-		err = errors.New(fmt.Sprintf("Could not parse %+v as id", id))
+		err = errors.New(fmt.Sprintf("could not parse %+v as id", id))
 	}
 	return nil, err
 }
@@ -92,6 +92,30 @@ func (service Service) DeleteNote(id uint64) error {
 	return err
 }
 
+//Update an existing Note record.
+func (service Service) UpdateNote(id uint64, n *notes.Note) (*notes.Note, error) {
+	session, collection, err := service.connect()
+	if err != nil {
+		return n, err
+	}
+	defer session.Close()
+
+	oldNote, err  := service.One(id)
+	if err != nil {
+		return n, err
+	}
+	oldNote.Title = n.Title
+	oldNote.Body = n.Body
+
+	//Try to update this record.
+	err = collection.UpdateReturning(oldNote)
+	if err != nil {
+		return n, err
+	}
+
+	return n, nil
+}
+
 //Establishes a connection to the specified MySQL database, gets a collection, and returns both.
 //Please remember to Close() your db connections.
 func (service Service) connect() (db.Database, db.Collection, error) {
@@ -110,6 +134,7 @@ func (service Service) connect() (db.Database, db.Collection, error) {
 	return session, collection, nil
 }
 
+//Factory method to make a mysql.Service
 func New(connectionString string) (*Service, error) {
 	service := new(Service)
 
@@ -121,3 +146,4 @@ func New(connectionString string) (*Service, error) {
 
 	return service, nil
 }
+

@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	connectionString := "root:trololol@tcp(db:3306)/notes" // TODO - pull this from a config.
+	connectionString := "notes:cr0wdst4r@tcp(db:3306)/notes" // TODO - pull this from a config.
 
 	service, err := mysql.New(connectionString) // Makes a new mysql.Service (after trying to parse connectionString
 	if err != nil {
@@ -28,6 +28,7 @@ func main() {
 	router.GET("/notes", server.ListNotes)
 	router.POST("/notes", server.CreateNote)
 	router.GET("/notes/:id", server.GetNote)
-	router.DELETE("notes/:id", server.DeleteNote)
+	router.POST("/notes/:id", server.UpdateNote)
+	router.DELETE("/notes/:id", server.DeleteNote)
 	router.Run()
 }

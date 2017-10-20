@@ -8,11 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/willdobbins/notes"
+	"fmt"
 )
 
 //Essentially just a controller which has a NoteManager attached.
 type Server struct {
-	Service notes.NoteManager
+	Service notes.Service
 }
 
 //Simple health check
@@ -28,6 +29,7 @@ func (s Server) ListNotes(c *gin.Context) {
 	if err != nil {
 		log.Print(err)
 	}
+
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{"results": set})
 }
 
@@ -36,11 +38,10 @@ func (s Server) GetNote(c *gin.Context) {
 	id := c.Param("id")
 	idNumber, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Could not parse that ID"})
+		log.Print(err)
 	}
 
-	note, err := s.Service.Note(idNumber)
-
+	note, err := s.Service.One(idNumber)
 	if err != nil {
 		log.Print(err)
 	}
@@ -70,10 +71,32 @@ func (s Server) DeleteNote(c *gin.Context) {
 	if err != nil {
 		log.Print(err)
 	}
+
 	err = s.Service.DeleteNote(idNumber)
 	if err != nil {
 		log.Print(err)
 	}
 
 	c.Redirect(http.StatusMovedPermanently, "/notes/")
+}
+
+func (s Server) UpdateNote(c *gin.Context) {
+	id := c.Param("id")
+	idNumber, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		log.Print(err)
+	}
+
+	var n = new(notes.Note)
+	err = c.Bind(n)
+	if err != nil {
+		log.Print(err)
+	}
+
+	n, err = s.Service.UpdateNote(idNumber, n)
+	if err != nil {
+		log.Print(err)
+	}
+
+	c.Redirect(http.StatusMovedPermanently, fmt.Sprintf("/notes/%d", idNumber))
 }

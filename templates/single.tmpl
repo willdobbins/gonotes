@@ -1,15 +1,17 @@
 <html>
 <head><title>{{.Title}}</title></head>
 <body>
-  <article>
-    <header>
-      <h1>
-        {{.Title}}
-      </h1>
-    </header>
-    <textarea>
-      {{.Body}}
-    </textarea>
-  </article>
+    <article>
+        <form action="/notes/{{.ID}}" method="post">
+            <section>
+            <header>
+                <label>Title<input type="text" value="{{.Title}}" name="title"></label>
+            </header>
+            <textarea cols="100" rows="30" name="body">{{.Body}}</textarea>
+            </section>
+            <button type="submit">Save</button>
+        </form>
+    </article>
+    <a href="/notes">Return to Index</a>
 </body>
 </html>

@@ -3,8 +3,11 @@ services:
   db:
     image: mysql
     environment:
-      # TODO: set up root pw in an includable file or setup non-root user/pw
-      MYSQL_ROOT_PASSWORD: trololol
+      # TODO: set up root pw in an env file or setup non-root user/pw
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: notes
+      MYSQL_USER: notes
+      MYSQL_PASSWORD: cr0wdst4r
     volumes:
     # docker auto-runs all .sql or .sql.gz files in this path.
      - ../../db/bootstrap:/docker-entrypoint-initdb.d
@@ -13,7 +16,6 @@ services:
     volumes:
       - ../../../:/go/src/github.com/willdobbins/notes
     ports:
-      - 8080:8080
       - 3000:3000
     links:
       - db

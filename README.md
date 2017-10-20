@@ -5,9 +5,10 @@ based projects are/can be structured.  It is aimed at novices (like its
 developer), and mostly intended as an example of how to structure a Golang
 project that needs subpackages, based on the structure advice provided by
 [Ben Johnson](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1)
-and (more sauce)
+and [Standard Go Project Layout](https://github.com/golang-standards/project-layout).
 ## Requirements
-* docker (either native or machine)
+* docker (developer is running 17.09.0-ce) OR
+* docker-machine (developer is running 0.12.2)
 ## Up & Running
 ```bash
 $ docker-compose -f ./docker/compose/vm/docker-compose.yml up
@@ -19,12 +20,11 @@ Once the build is finished, go to your_vm_ip:3000/notes/ (or localhost, if runni
 * [gin-gonic/gin](https://github.com/gin-gonic/gin) - A very fast router.
 
 ## ToDo
-* Feature: Tags - categorization of notes (Adding new model to project)
+* Feature: Tagging Notes - categorization of notes (Adding new model to project)
 * Add a caching layer so we don't repeat DB queries (example of composing a
 struct in another struct)
 * Improve our Read template to be a read and update template
 * Tests & mock service implementations (Need to introduce tests in lesson)
-* Switch gin to another auto builder or fix huge build delays. (realize?)
 
 ## Changelog
 * 2017-10-19 Big rewrite and documentation effort.
