@@ -1,27 +1,26 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+
 	"github.com/willdobbins/notes/http"
 	"github.com/willdobbins/notes/mysql"
-	"log"
 )
 
 func main() {
-	//Creates a new instance of a mysql implementation of the NoteService.
-	service, err := mysql.NewService()
+	connectionString := "root:trololol@tcp(db:3306)/notes" // TODO - pull this from a config.
 
-	//if it fails to build (error connecting, etc, dies)
+	service, err := mysql.New(connectionString) // Makes a new mysql.Service (after trying to parse connectionString
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("fatal: " + err.Error())
 	}
 
-	//Sets up a Server - not sure about name, functionally it's a controller
-	//with a dependency on NoteService.
-	server := new(http.Server)
-	server.Service = service
+	//Sets up our controller with a copy of the mysql.Service
+	server := http.Server{Service: service}
 
-	//Defines routes for
+	//Defines routes and handlers for our app & then starts the router.
 	router := gin.Default()
 	router.Static("/assets", "./assets")
 	router.LoadHTMLGlob("./templates/*")
@@ -29,6 +28,6 @@ func main() {
 	router.GET("/notes", server.ListNotes)
 	router.POST("/notes", server.CreateNote)
 	router.GET("/notes/:id", server.GetNote)
-	router.DELETE("/notes/:id", server.DeleteNote)
+	router.DELETE("notes/:id", server.DeleteNote)
 	router.Run()
 }
